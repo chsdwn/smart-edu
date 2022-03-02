@@ -1,3 +1,4 @@
+const Category = require('../models/category')
 const Course = require('../models/course')
 
 exports.getIndexPage = (req, res) => {
@@ -9,8 +10,16 @@ exports.getAboutPage = (req, res) => {
 }
 
 exports.getCoursesPage = async (req, res) => {
-  const courses = await Course.find()
-  res.status(200).render('courses', { page_name: 'courses', courses })
+  let filter
+  const categorySlug = req.query.category
+  if (categorySlug) {
+    const category = await Category.findOne({ slug: categorySlug })
+    filter = { category: category._id }
+  }
+
+  const courses = await Course.find(filter)
+  const categories = await Category.find()
+  res.status(200).render('courses', { page_name: 'courses', courses, categories })
 }
 
 exports.getCourseDetailsPage = async (req, res) => {

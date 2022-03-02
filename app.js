@@ -1,5 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
+
+const categoryRouter = require('./routes/category')
 const courseRouter = require('./routes/course')
 const pageRouter = require('./routes/page')
 
@@ -16,6 +18,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/', pageRouter)
+app.use('/categories', categoryRouter)
 app.use('/courses', courseRouter)
 
 const port = process.env.PORT || 3000
