@@ -24,14 +24,18 @@ exports.getCoursesPage = async (req, res) => {
 }
 
 exports.getCourseDetailsPage = async (req, res) => {
-  const course = await Course.findOne({ slug: req.params.slug })
+  const course = await Course
+    .findOne({ slug: req.params.slug })
+    .populate('user')
   res.status(200).render('course', { page_name: 'courses', course })
 }
 
 exports.getDashboardPage = async (req, res) => {
-  const user = await User.findById(req.session.userID)
+  const userID = req.session.userID
+  const user = await User.findById(userID)
   const categories = await Category.find()
-  res.status(200).render('dashboard', { page_name: 'dashboard', user, categories })
+  const courses = await Course.find({ user: userID })
+  res.status(200).render('dashboard', { page_name: 'dashboard', user, categories, courses })
 }
 
 exports.getLoginPage = (req, res) => {

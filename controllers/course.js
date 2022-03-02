@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    await Course.create(req.body)
+    await Course.create({ ...req.body, user: req.session.userID })
     res.status(201).redirect('/courses')
   } catch (err) {
     res.status(400).send(err.message)
