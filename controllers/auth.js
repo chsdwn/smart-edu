@@ -17,7 +17,11 @@ exports.login = async (req, res) => {
     if (!user) return res.status(404).send('User not found')
 
     const isSame = await bcrypt.compare(password, user.password)
-    if (isSame) return res.status(200).send('Logged in successfully')
+    if (isSame) {
+      req.session.userID = user._id
+      return res.status(200).redirect('/')
+    }
+
     res.status(404).send('Email or password is wrong')
   } catch (err) {
     res.status(400).send(err.message)
