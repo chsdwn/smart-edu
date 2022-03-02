@@ -29,10 +29,7 @@ exports.getCourseDetailsPage = async (req, res) => {
 }
 
 exports.getDashboardPage = async (req, res) => {
-  const userID = req.session.userID
-  if (!userID) return res.status(401).send('Login to access dashboard.')
-
-  const user = await User.findById(userID)
+  const user = await User.findById(req.session.userID)
   res.status(200).render('dashboard', { page_name: 'dashboard', user })
 }
 
