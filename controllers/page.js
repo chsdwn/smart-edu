@@ -30,7 +30,8 @@ exports.getCourseDetailsPage = async (req, res) => {
 
 exports.getDashboardPage = async (req, res) => {
   const user = await User.findById(req.session.userID)
-  res.status(200).render('dashboard', { page_name: 'dashboard', user })
+  const categories = await Category.find()
+  res.status(200).render('dashboard', { page_name: 'dashboard', user, categories })
 }
 
 exports.getLoginPage = (req, res) => {
