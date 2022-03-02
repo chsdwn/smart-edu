@@ -27,3 +27,12 @@ exports.login = async (req, res) => {
     res.status(400).send(err.message)
   }
 }
+
+exports.logout = async (req, res) => {
+  try {
+    await req.session.destroy()
+    res.redirect('/')
+  } catch (err) {
+    res.status(400).send(err.message)
+  }
+}

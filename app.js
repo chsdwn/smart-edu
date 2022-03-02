@@ -1,3 +1,4 @@
+const MongoStore = require('connect-mongo')
 const express = require('express')
 const session = require('express-session')
 const mongoose = require('mongoose')
@@ -7,7 +8,8 @@ const courseRouter = require('./routes/course')
 const pageRouter = require('./routes/page')
 const userRouter = require('./routes/user')
 
-mongoose.connect('mongodb://localhost/smart-edu')
+const CONNECTION_STRING = 'mongodb://localhost/smart-edu'
+mongoose.connect(CONNECTION_STRING)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error(err.message))
 
@@ -23,7 +25,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(session({
   secret: process.env.SECRET || 'DUMMY_SECRET',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: CONNECTION_STRING })
 }))
 app.use('*', (req, res, next) => {
   global.userID = req.session.userID
