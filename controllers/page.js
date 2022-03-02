@@ -27,6 +27,10 @@ exports.getCourseDetailsPage = async (req, res) => {
   res.status(200).render('course', { page_name: 'courses', course })
 }
 
+exports.getLoginPage = (req, res) => {
+  res.status(200).render('login', { page_name: 'login' })
+}
+
 exports.getRegisterPage = (req, res) => {
   res.status(200).render('register', { page_name: 'register' })
 }
