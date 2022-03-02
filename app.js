@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const categoryRouter = require('./routes/category')
 const courseRouter = require('./routes/course')
 const pageRouter = require('./routes/page')
+const userRouter = require('./routes/user')
 
 mongoose.connect('mongodb://localhost/smart-edu')
   .then(() => console.log('Connected to MongoDB'))
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/', pageRouter)
 app.use('/categories', categoryRouter)
 app.use('/courses', courseRouter)
+app.use('/users', userRouter)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`Listening on port ${port}`))

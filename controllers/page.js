@@ -26,3 +26,7 @@ exports.getCourseDetailsPage = async (req, res) => {
   const course = await Course.findOne({ slug: req.params.slug })
   res.status(200).render('course', { page_name: 'courses', course })
 }
+
+exports.getRegisterPage = (req, res) => {
+  res.status(200).render('register', { page_name: 'register' })
+}
