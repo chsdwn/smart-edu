@@ -1,5 +1,6 @@
 const Category = require('../models/category')
 const Course = require('../models/course')
+const User = require('../models/user')
 
 exports.getIndexPage = (req, res) => {
   res.status(200).render('index', { page_name: 'index' })
@@ -25,6 +26,14 @@ exports.getCoursesPage = async (req, res) => {
 exports.getCourseDetailsPage = async (req, res) => {
   const course = await Course.findOne({ slug: req.params.slug })
   res.status(200).render('course', { page_name: 'courses', course })
+}
+
+exports.getDashboardPage = async (req, res) => {
+  const userID = req.session.userID
+  if (!userID) return res.status(401).send('Login to access dashboard.')
+
+  const user = await User.findById(userID)
+  res.status(200).render('dashboard', { page_name: 'dashboard', user })
 }
 
 exports.getLoginPage = (req, res) => {

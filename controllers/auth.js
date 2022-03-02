@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
     const isSame = await bcrypt.compare(password, user.password)
     if (isSame) {
       req.session.userID = user._id
-      return res.status(200).redirect('/')
+      return res.status(200).redirect('/dashboard')
     }
 
     res.status(404).send('Email or password is wrong')
