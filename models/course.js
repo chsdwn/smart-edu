@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const slugify = require('slugify')
 
 const courseSchema = new mongoose.Schema({
   name: {
@@ -11,10 +12,22 @@ const courseSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  slug: {
+    type: String,
+    unique: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
   }
+})
+
+courseSchema.pre('validate', function (next) {
+  this.slug = slugify(this.name, {
+    lower: true,
+    strict: true
+  })
+  next()
 })
 
 const Course = mongoose.model('Course', courseSchema)
