@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator')
+const Course = require('../models/course')
 const User = require('../models/user')
 
 exports.create = async (req, res) => {
@@ -41,5 +42,21 @@ exports.logout = async (req, res) => {
     res.redirect('/')
   } catch (err) {
     res.status(400).send(err.message)
+  }
+}
+
+exports.delete = async (req, res) => {
+  try {
+    const userId = req.params.id
+    const user = await User.findByIdAndRemove(userId)
+    if (user.role === 'teacher') {
+      await Course.deleteMany({ user: userId })
+    }
+
+    req.flash('success', 'User has been deleted successfully.')
+    res.status(200).redirect('/dashboard')
+  } catch {
+    req.flash('error', 'An error occured')
+    res.status(400).redirect('/dashboard')
   }
 }

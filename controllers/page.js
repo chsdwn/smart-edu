@@ -2,8 +2,15 @@ const Category = require('../models/category')
 const Course = require('../models/course')
 const User = require('../models/user')
 
-exports.getIndexPage = (req, res) => {
-  res.status(200).render('index', { page_name: 'index' })
+exports.getIndexPage = async (req, res) => {
+  const [courses, courseCount, studentCount, teacherCount] = await Promise.all([
+    Course.find().sort('-createdAt').limit(2),
+    Course.countDocuments(),
+    User.find({ role: 'student' }).countDocuments(),
+    User.find({ role: 'teacher' }).countDocuments()
+  ])
+
+  res.status(200).render('index', { page_name: 'index', courses, courseCount, studentCount, teacherCount })
 }
 
 exports.getAboutPage = (req, res) => {
@@ -57,7 +64,8 @@ exports.getDashboardPage = async (req, res) => {
   const user = await User.findById(userID).populate('courses')
   const categories = await Category.find()
   const courses = await Course.find({ user: userID })
-  res.status(200).render('dashboard', { page_name: 'dashboard', user, categories, courses })
+  const users = await User.find().sort('_id')
+  res.status(200).render('dashboard', { page_name: 'dashboard', user, categories, courses, users })
 }
 
 exports.getLoginPage = (req, res) => {

@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.route('/login').post(authController.login)
 router.route('/logout').get(authController.logout)
+router.route('/:id').delete(authController.delete)
 router.route('/signup').post([
   body('name').not().isEmpty().withMessage('Name cannot be empty.'),
   body('email').isEmail().withMessage('Enter a valid mail address.'),
