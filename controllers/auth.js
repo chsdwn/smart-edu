@@ -1,12 +1,15 @@
 const bcrypt = require('bcrypt')
+const { validationResult } = require('express-validator')
 const User = require('../models/user')
 
 exports.create = async (req, res) => {
   try {
     await User.create(req.body)
     res.status(201).redirect('/login')
-  } catch (err) {
-    res.status(400).send(err.message)
+  } catch {
+    const { errors } = validationResult(req)
+    req.flash('error', errors?.map((error) => error.msg).join(' ') || 'An error occured.')
+    res.status(400).redirect('/register')
   }
 }
 
@@ -14,7 +17,10 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await User.findOne({ email })
-    if (!user) return res.status(404).send('User not found')
+    if (!user) {
+      req.flash('error', 'User is not exists.')
+      return res.status(400).redirect('/login')
+    }
 
     const isSame = await bcrypt.compare(password, user.password)
     if (isSame) {
@@ -22,7 +28,8 @@ exports.login = async (req, res) => {
       return res.status(200).redirect('/dashboard')
     }
 
-    res.status(404).send('Email or password is wrong')
+    req.flash('error', 'Email or password is wrong.')
+    res.status(400).redirect('/login')
   } catch (err) {
     res.status(400).send(err.message)
   }
