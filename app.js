@@ -1,3 +1,4 @@
+const flash = require('connect-flash')
 const MongoStore = require('connect-mongo')
 const express = require('express')
 const session = require('express-session')
@@ -29,6 +30,11 @@ app.use(session({
   saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: CONNECTION_STRING })
 }))
+app.use(flash())
+app.use((req, res, next) => {
+  res.locals.flashMessages = req.flash()
+  next()
+})
 app.use('*', (req, res, next) => {
   global.userID = req.session.userID
   next()

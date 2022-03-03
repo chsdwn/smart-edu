@@ -12,10 +12,12 @@ exports.getAll = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    await Course.create({ ...req.body, user: req.session.userID })
+    const course = await Course.create({ ...req.body, user: req.session.userID })
+    req.flash('success', `${course.name} has been created successfully.`)
     res.status(201).redirect('/courses')
   } catch (err) {
-    res.status(400).send(err.message)
+    req.flash('error', 'An error occured.')
+    res.status(400).redirect('/courses')
   }
 }
 
