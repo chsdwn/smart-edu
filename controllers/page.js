@@ -11,14 +11,24 @@ exports.getAboutPage = (req, res) => {
 }
 
 exports.getCoursesPage = async (req, res) => {
-  let filter
+  let filter = { category: null }
   const categorySlug = req.query.category
+  const searchKeyword = req.query.keyword || ''
+
   if (categorySlug) {
     const category = await Category.findOne({ slug: categorySlug })
     filter = { category: category._id }
   }
 
-  const courses = await Course.find(filter)
+  const courses = await Course
+    .find({
+      $or: [
+        { name: { $regex: '.*' + searchKeyword + '.*', $options: 'i' } },
+        { category: filter.category }
+      ]
+    })
+    .sort('-createdAt')
+    .populate('user')
   const categories = await Category.find()
   res.status(200).render('courses', { page_name: 'courses', courses, categories })
 }
@@ -28,7 +38,14 @@ exports.getCourseDetailsPage = async (req, res) => {
   const course = await Course
     .findOne({ slug: req.params.slug })
     .populate('user')
-  res.status(200).render('course', { page_name: 'courses', course, isEnrolled: user.courses.includes(course._id) })
+  const categories = await Category.find()
+
+  res.status(200).render('course', {
+    page_name: 'courses',
+    course,
+    categories,
+    isEnrolled: user.courses.includes(course._id)
+  })
 }
 
 exports.getDashboardPage = async (req, res) => {
