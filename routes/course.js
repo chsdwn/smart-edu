@@ -6,6 +6,7 @@ const router = express.Router()
 
 router.route('/').get(courseController.getAll)
 router.route('/').post(roleMiddleware(['teacher', 'admin']), courseController.create)
+router.route('/:slug').put(courseController.update)
 router.route('/:slug').delete(courseController.delete)
 router.route('/enroll/:id').post(courseController.enroll)
 router.route('/release/:id').post(courseController.release)

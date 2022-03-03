@@ -21,6 +21,23 @@ exports.create = async (req, res) => {
   }
 }
 
+exports.update = async (req, res) => {
+  try {
+    const { name, description, category } = req.body
+    const course = await Course.findOne({ slug: req.params.slug })
+    course.name = name
+    course.description = description
+    course.category = category
+    await course.save()
+
+    req.flash('success', `${course.name} has been updated successfully.`)
+    res.status(200).redirect('/dashboard')
+  } catch (err) {
+    req.flash('error', 'An error occured.')
+    res.status(400).redirect('/dashboard')
+  }
+}
+
 exports.delete = async (req, res) => {
   try {
     await Course.findOneAndRemove({ slug: req.params.slug })
