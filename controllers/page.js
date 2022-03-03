@@ -10,6 +10,10 @@ exports.getAboutPage = (req, res) => {
   res.status(200).render('about', { page_name: 'about' })
 }
 
+exports.getContactPage = (req, res) => {
+  res.status(200).render('contact', { page_name: 'contact' })
+}
+
 exports.getCoursesPage = async (req, res) => {
   let filter = { category: null }
   const categorySlug = req.query.category

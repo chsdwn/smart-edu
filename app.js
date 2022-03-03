@@ -4,6 +4,7 @@ const session = require('express-session')
 const mongoose = require('mongoose')
 
 const categoryRouter = require('./routes/category')
+const contactRouter = require('./routes/contact')
 const courseRouter = require('./routes/course')
 const pageRouter = require('./routes/page')
 const userRouter = require('./routes/user')
@@ -35,6 +36,7 @@ app.use('*', (req, res, next) => {
 
 app.use('/', pageRouter)
 app.use('/categories', categoryRouter)
+app.use('/contact', contactRouter)
 app.use('/courses', courseRouter)
 app.use('/users', userRouter)
 
