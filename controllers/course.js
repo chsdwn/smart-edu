@@ -29,3 +29,14 @@ exports.enroll = async (req, res) => {
     res.status(400).send(err.message)
   }
 }
+
+exports.release = async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userID)
+    user.courses.pull({ _id: req.params.id })
+    await user.save()
+    res.status(200).redirect('/dashboard')
+  } catch (err) {
+    res.status(400).send(err.message)
+  }
+}

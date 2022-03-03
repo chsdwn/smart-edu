@@ -130,6 +130,11 @@
 												</div>
 												<div class="course-desc">
 													<p><%= course.description %></p>
+													<form method="POST" action="/courses/release/<%= course._id %>">
+														<button class="bnt btn-lg btn-danger text-white">
+															<span>Release</span>
+														</button>
+													</form>
 												</div>
 											</div>
 										</div>

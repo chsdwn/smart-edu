@@ -24,10 +24,11 @@ exports.getCoursesPage = async (req, res) => {
 }
 
 exports.getCourseDetailsPage = async (req, res) => {
+  const user = await User.findById(req.session.userID)
   const course = await Course
     .findOne({ slug: req.params.slug })
     .populate('user')
-  res.status(200).render('course', { page_name: 'courses', course })
+  res.status(200).render('course', { page_name: 'courses', course, isEnrolled: user.courses.includes(course._id) })
 }
 
 exports.getDashboardPage = async (req, res) => {
