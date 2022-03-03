@@ -2,6 +2,7 @@ const flash = require('connect-flash')
 const MongoStore = require('connect-mongo')
 const express = require('express')
 const session = require('express-session')
+const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 
 const categoryRouter = require('./routes/category')
@@ -30,6 +31,7 @@ app.use(session({
   saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: CONNECTION_STRING })
 }))
+app.use(methodOverride('_method', { methods: ['POST', 'GET'] }))
 app.use(flash())
 app.use((req, res, next) => {
   res.locals.flashMessages = req.flash()

@@ -13,7 +13,21 @@
 	
     <div id="overviews" class="section wb">
         <div class="container">
-            <div class="row"> 
+            <div class="row">
+
+							<% if (flashMessages) { %>
+								<% if (flashMessages.success) { %>
+										<div class="alert alert-success">
+												<%= flashMessages.success %>
+										</div>
+								<% } %>
+			
+								<% if (flashMessages.error) { %>
+										<div class="alert alert-danger">
+												<%= flashMessages.error %>
+										</div>
+								<% } %>
+							<% } %>
 
 							<% if (user.role === 'teacher') { %>
 								<div class="col-lg-12 text-center ">
@@ -101,6 +115,21 @@
 												</div>
 												<div class="course-desc">
 													<p><%= course.description %></p>
+												</div>
+												<div class="row justify-content-between mx-1">
+													<a
+														href="#"
+														class="btn btn-primary rounded-0 text-white"
+													>
+														<span>Update</span>
+													</a>
+													<a
+														href="/courses/<%= course.slug %>?_method=DELETE"
+														class="btn btn-danger rounded-0 text-white"
+														onclick="return confirm('Are you sure?')"
+													>
+														<span>Delete</span>
+													</a>
 												</div>
 											</div>
 										</div>

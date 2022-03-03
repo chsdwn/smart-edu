@@ -21,6 +21,17 @@ exports.create = async (req, res) => {
   }
 }
 
+exports.delete = async (req, res) => {
+  try {
+    await Course.findOneAndRemove({ slug: req.params.slug })
+    req.flash('success', 'Deleted successfully.')
+    res.status(200).redirect('/dashboard')
+  } catch (err) {
+    req.flash('error', 'An error occured.')
+    res.status(400).redirect('/dashboard')
+  }
+}
+
 exports.enroll = async (req, res) => {
   try {
     const user = await User.findById(req.session.userID)
